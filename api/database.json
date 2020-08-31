@@ -1,0 +1,57 @@
+{
+  "entries": [
+    {
+      "id": 1,
+      "concept": "1235",
+      "entry": "123",
+      "date": 1598458543321,
+      "moodId": 1
+    },
+    {
+      "concept": "abc",
+      "entry": "123",
+      "date": 1598458548239,
+      "moodId": 2,
+      "id": 2
+    },
+    {
+      "concept": "Delete",
+      "entry": "Now Deleting",
+      "date": 1598458559152,
+      "moodId": 1,
+      "id": 3
+    },
+    {
+      "concept": "ANGRY",
+      "entry": "jlj",
+      "date": 1598557358781,
+      "moodId": 3,
+      "id": 4
+    },
+    {
+      "concept": "678",
+      "entry": "Now Deleting",
+      "date": 1598557373697,
+      "moodId": 4,
+      "id": 5
+    }
+  ],
+  "moods": [
+    {
+      "id": 1,
+      "label": "Happy"
+    },
+    {
+      "id": 2,
+      "label": "Sad"
+    },
+    {
+      "id": 3,
+      "label": "Angry"
+    },
+    {
+      "id": 4,
+      "label": "Ok"
+    }
+  ]
+}
