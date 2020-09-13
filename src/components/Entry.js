@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { EntryContext } from "./EntryProvider";
 
-export default ({ entry, moods }) => {
+export const Entry = ({ entry, moods }) => {
 
   const mood = moods.find(m => m.id === entry.moodId)
   const { deleteEntry, getEntryById } = useContext(EntryContext)

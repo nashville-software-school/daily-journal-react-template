@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import DailyJournal from "./DailyJournal";
+import { DailyJournal } from "./DailyJournal";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(

@@ -1,10 +1,10 @@
 import React from "react";
 import { EntryProvider } from "./components/EntryProvider";
-import EntryForm from "./components/EntryForm";
-import EntryList from "./components/EntryList";
+import { EntryForm } from "./components/EntryForm";
+import { EntryList } from "./components/EntryList";
 import { MoodProvider } from "./components/mood/MoodProvider";
 
-const DailyJournal = () => {
+export const DailyJournal = () => {
   return (
     <div className="DailyJournal">
       <EntryProvider>
@@ -16,5 +16,3 @@ const DailyJournal = () => {
     </div>
   );
 };
-
-export default DailyJournal;

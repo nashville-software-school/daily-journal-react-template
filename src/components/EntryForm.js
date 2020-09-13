@@ -3,7 +3,7 @@ import { EntryContext } from "./EntryProvider"
 import { MoodContext } from "./mood/MoodProvider"
 
 
-export default props => {
+export const EntryForm = (props) => {
     const { addEntry, updateEntry, entry, setEntry } = useContext(EntryContext)
     const { moods, getMoods } = useContext(MoodContext)
 

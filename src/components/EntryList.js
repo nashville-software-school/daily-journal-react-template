@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { EntryContext } from "./EntryProvider";
-import Entry from "./Entry";
+import { Entry } from "./Entry";
 import { MoodContext } from "./mood/MoodProvider";
 
-export default () => {
+export const EntryList = () => {
   const { entries, getEntries, searchEntries } = useContext(EntryContext);
   const { moods, getMoods } = useContext(MoodContext);
   const [filteredEntries, setEntries] = useState([]);
@@ -65,9 +65,9 @@ export default () => {
 
       <h1>Entries</h1>
 
-      {/* 
+      {/*
             Pseudo Code
-            .filter(happyEntries => happyEntries.mood.label === "Happy") 
+            .filter(happyEntries => happyEntries.mood.label === "Happy")
         */}
 
       <div className="entries">
