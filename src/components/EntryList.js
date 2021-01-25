@@ -20,7 +20,9 @@ export const EntryList = () => {
   }, [entries])
 
   useEffect(() => {
-    searchEntries(searchedTerm)
+    if (searchedTerm !== "") {
+        searchEntries(searchedTerm)
+    }
   }, [searchedTerm])
 
 
