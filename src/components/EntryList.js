@@ -1,19 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
-import { EntryContext } from "./EntryProvider";
+import React, { useEffect, useState } from "react";
 import { Entry } from "./Entry";
-import { MoodContext } from "./mood/MoodProvider";
+import { searchEntries } from "./EntryManager";
 
-export const EntryList = () => {
-  const { entries, getEntries, searchEntries } = useContext(EntryContext);
-  const { moods, getMoods } = useContext(MoodContext);
+export const EntryList = ({ moods, entries, onEditButtonClick, onDeleteButtonClick }) => {
+
   const [filteredEntries, setEntries] = useState([]);
   const [searchedTerm, setTerm] = useState("");
   const [moodSelected, setMoodSelected] = useState("");
-
-  useEffect(() => {
-    getEntries()
-      .then(getMoods)
-  }, []);
 
   useEffect(() => {
     setEntries(entries)
@@ -21,7 +14,9 @@ export const EntryList = () => {
 
   useEffect(() => {
     if (searchedTerm !== "") {
-        searchEntries(searchedTerm)
+      searchEntries(searchedTerm).then(entriesData => setEntries(entriesData))
+    } else {
+      setEntries(entries)
     }
   }, [searchedTerm])
 
@@ -40,7 +35,7 @@ export const EntryList = () => {
       {
         moods.map(mood => {
           return <>
-            <input type="radio" value={mood.id} name="moodId" checked={moodSelected === mood.id}
+            <input type="radio" key={mood.id} value={mood.id} name="moodId" checked={moodSelected === mood.id}
               onClick={filterAllEntries}
             /> {mood.label}
           </>
@@ -74,7 +69,13 @@ export const EntryList = () => {
 
       <div className="entries">
         {filteredEntries.map(entry => {
-          return <Entry key={entry.id} entry={entry} moods={moods} />;
+          return <Entry 
+            key={entry.id}
+            entry={entry}
+            mood={moods.find(m => m.id === entry.moodId)}
+            onEditButtonClick={onEditButtonClick}
+            onDeleteButtonClick={onDeleteButtonClick}
+          />;
         })}
       </div>
 

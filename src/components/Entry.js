@@ -1,10 +1,6 @@
-import React, { useContext } from "react";
-import { EntryContext } from "./EntryProvider";
+import React from "react";
 
-export const Entry = ({ entry, moods }) => {
-
-  const mood = moods.find(m => m.id === entry.moodId)
-  const { deleteEntry, getEntryById } = useContext(EntryContext)
+export const Entry = ({ entry, mood, onEditButtonClick, onDeleteButtonClick }) => {
 
   return (
 
@@ -12,16 +8,16 @@ export const Entry = ({ entry, moods }) => {
       <div className="entry__concept">{entry.concept}</div>
       <div className="entry__entry">{entry.entry}</div>
       <div className="entry__date">{entry.date}</div>
-      <div className="entry__mood">{mood.label}</div>
+      <div className="entry__mood">{mood?.label}</div>
 
       <button onClick={
         () => {
-          deleteEntry(entry)
+          onDeleteButtonClick(entry.id)
         }
       }>Delete</button>
       <button onClick={
         () => {
-          getEntryById(entry.id)
+          onEditButtonClick(entry.id)
         }
       }>Edit</button>
     </section>

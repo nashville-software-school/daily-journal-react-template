@@ -1,24 +1,17 @@
-import React, { useContext, useState, useEffect } from "react"
-import { EntryContext } from "./EntryProvider"
-import { MoodContext } from "./mood/MoodProvider"
+import React, { useState, useEffect } from "react"
+import { addEntry, updateEntry } from './EntryManager'
 
-
-export const EntryForm = (props) => {
-    const { addEntry, updateEntry, entry, setEntry } = useContext(EntryContext)
-    const { moods, getMoods } = useContext(MoodContext)
-
-    const [editMode, editModeChanged] = useState(false)
+export const EntryForm = ({ entry, moods, onFormSubmit }) => {
+    const [editMode, setEditMode] = useState(false)
+    const [updatedEntry, setUpdatedEntry] = useState(entry)
 
     useEffect(() => {
-        getMoods()
-    }, [])
-
-    useEffect(() => {
+        setUpdatedEntry(entry)
         if ('id' in entry) {
-            editModeChanged(true)
+            setEditMode(true)
         }
         else {
-            editModeChanged(false)
+            setEditMode(false)
         }
     }, [entry])
 
@@ -29,30 +22,13 @@ export const EntryForm = (props) => {
         */
         const newEntry = Object.assign({}, entry)
         newEntry[event.target.name] = event.target.value
-        setEntry(newEntry)
+        setUpdatedEntry(newEntry)
     }
 
 
 
     const constructNewEntry = () => {
-
-        if (editMode) {
-            updateEntry({
-                id: entry.id,
-                concept: entry.concept,
-                entry: entry.entry,
-                date: entry.date,
-                moodId: parseInt(entry.moodId)
-            })
-        } else {
-            addEntry({
-                concept: entry.concept,
-                entry: entry.entry,
-                date: Date.now(),
-                moodId: parseInt(entry.moodId)
-            })
-        }
-        setEntry({ concept: "", entry: "", moodId: 0 })
+        onFormSubmit(updatedEntry)
     }
 
     return (
@@ -64,7 +40,7 @@ export const EntryForm = (props) => {
                     <input type="text" name="concept" required autoFocus className="form-control"
                         proptype="varchar"
                         placeholder="Concept"
-                        value={entry.concept}
+                        value={updatedEntry.concept}
                         onChange={handleControlledInputChange}
                     />
                 </div>
@@ -75,7 +51,7 @@ export const EntryForm = (props) => {
                     <input type="text" name="entry" required className="form-control"
                         proptype="varchar"
                         placeholder="Entry"
-                        value={entry.entry}
+                        value={updatedEntry.entry}
                         onChange={handleControlledInputChange}
                     />
                 </div>
@@ -85,8 +61,8 @@ export const EntryForm = (props) => {
                     <label htmlFor="moodId">Mood: </label>
                     <select name="moodId" className="form-control"
                         proptype="int"
-                        value={entry.moodId}
-                        onChange={handleControlledInputChange}>
+                            value={updatedEntry.moodId}
+                            onChange={handleControlledInputChange}>
 
                         <option value="0">Select a mood</option>
                         {moods.map(m => (
