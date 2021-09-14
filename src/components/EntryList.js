@@ -21,64 +21,55 @@ export const EntryList = ({ moods, entries, onEditButtonClick, onDeleteButtonCli
   }, [searchedTerm])
 
 
-  const filterAllEntries = (event) => {
-    const filteredEntriesByMood = entries.filter(entry => entry.moodId === parseInt(event.target.value))
+  const filterAllEntries = (moodId) => {
+    const filteredEntriesByMood = entries.filter(entry => entry.moodId === parseInt(moodId))
     setEntries(filteredEntriesByMood)
-    setMoodSelected(parseInt(event.target.value))
+    setMoodSelected(parseInt(moodId))
   }
 
 
   return (
-    <>
-      <h1>Filter Entries</h1>
-
-      {
-        moods.map(mood => {
-          return <>
-            <input type="radio" key={mood.id} value={mood.id} name="moodId" checked={moodSelected === mood.id}
-              onClick={filterAllEntries}
-            /> {mood.label}
-          </>
-        })
-      }
-
-      <div >
-        <button onClick={() => {
+    <article className="panel is-primary">
+      <h1 className="panel-heading">Entries</h1>
+      <p className="panel-tabs">
+        <a className={moodSelected === "" ? "is-active" : ""} onClick={() => {
           setEntries(entries)
           setMoodSelected("")
-        }}>Clear Filter</button>
+        }}>All</a>
+        {
+          moods.map(mood => {
+            return <a onClick={() => filterAllEntries(mood.id)} className={moodSelected === mood.id ? "is-active" : ""}>{mood.label}</a>
+          })
+        }
+      </p>
+      <div class="panel-block">
+        <p class="control has-icons-left">
+          <input class="input is-primary" type="text" placeholder="Search" onKeyUp={
+            (event) => {
+              const searchTerm = event.target.value
+              setTerm(searchTerm)
+            }
+          } />
+        </p>
       </div>
 
-      <div>
 
-        <input type="text" placeholder="Search" onKeyUp={
-          (event) => {
-            const searchTerm = event.target.value
-            setTerm(searchTerm)
-          }
-        } />
-
-      </div>
-
-      <h1>Entries</h1>
 
       {/*
             Pseudo Code
             .filter(happyEntries => happyEntries.mood.label === "Happy")
         */}
-
-      <div className="entries">
-        {filteredEntries.map(entry => {
-          return <Entry 
+      {filteredEntries.map(entry => {
+        return <div className="panel-block">
+          <Entry
             key={entry.id}
             entry={entry}
             mood={moods.find(m => m.id === entry.moodId)}
             onEditButtonClick={onEditButtonClick}
             onDeleteButtonClick={onDeleteButtonClick}
-          />;
-        })}
-      </div>
-
-    </>
+          />
+        </div>
+      })}
+    </article>
   );
 };

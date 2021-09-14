@@ -28,6 +28,7 @@ export const DailyJournal = () => {
   }
 
   const onFormSubmit = (entryData) => {
+    console.log("submit", entryData)
     if (entryData.id) {
       updateEntry(entryData).then(getAllEntries)
     } else {
@@ -42,13 +43,20 @@ export const DailyJournal = () => {
 
   return (
     <div className="DailyJournal container">
-      <EntryForm entry={entry} moods={moods} onFormSubmit={onFormSubmit}/>
-      <EntryList 
-        entries={entries} 
-        moods={moods} 
-        onEditButtonClick={onEditButtonClick} 
-        onDeleteButtonClick={onDeleteButtonClick}
-      />
+      <div className="columns">
+        <div className="column">
+          <EntryForm entry={entry} moods={moods} onFormSubmit={onFormSubmit} />
+        </div>
+        <div className="column">
+          <EntryList
+            entries={entries}
+            moods={moods}
+            onEditButtonClick={onEditButtonClick}
+            onDeleteButtonClick={onDeleteButtonClick}
+          />
+        </div>
+      </div>
+
     </div>
   );
 };
