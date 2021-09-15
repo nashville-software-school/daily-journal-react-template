@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import { addEntry, updateEntry } from './EntryManager'
 
 export const EntryForm = ({ entry, moods, onFormSubmit }) => {
     const [editMode, setEditMode] = useState(false)
@@ -28,15 +27,19 @@ export const EntryForm = ({ entry, moods, onFormSubmit }) => {
 
 
     const constructNewEntry = () => {
-        // TODO: make moodid an integer and add datetime
-        onFormSubmit(updatedEntry)
+        const copyEntry = { ...updatedEntry }
+        copyEntry.moodId = parseInt(copyEntry.moodId)
+        if (!copyEntry.date) {
+            copyEntry.date = Date(Date.now()).toLocaleString('en-us').split('GMT')[0]
+        }
+        onFormSubmit(copyEntry)
     }
 
     return (
         <article className="panel is-info">
             <h2 className="panel-heading">{editMode ? "Update Entry" : "Create Entry"}</h2>
             <div className="panel-block">
-                <form style={{width:"100%"}}>
+                <form style={{ width: "100%" }}>
                     <div className="field">
                         <label htmlFor="concept" className="label">Concept: </label>
                         <div className="control">
@@ -51,12 +54,12 @@ export const EntryForm = ({ entry, moods, onFormSubmit }) => {
                     <div className="field">
                         <label htmlFor="entry" className="label">Entry: </label>
                         <div className="control">
-                            <input type="text" name="entry" required className="input"
-                                proptype="varchar"
-                                placeholder="Entry"
+                            <textarea
+                                class="textarea"
+                                name="entry"
                                 value={updatedEntry.entry}
                                 onChange={handleControlledInputChange}
-                            />
+                            ></textarea>
                         </div>
                     </div>
                     <div className="field">

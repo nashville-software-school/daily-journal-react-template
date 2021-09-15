@@ -9,16 +9,12 @@ export const EntryList = ({ moods, entries, onEditButtonClick, onDeleteButtonCli
   const [moodSelected, setMoodSelected] = useState("");
 
   useEffect(() => {
-    setEntries(entries)
-  }, [entries])
-
-  useEffect(() => {
     if (searchedTerm !== "") {
       searchEntries(searchedTerm).then(entriesData => setEntries(entriesData))
     } else {
       setEntries(entries)
     }
-  }, [searchedTerm])
+  }, [searchedTerm, entries])
 
 
   const filterAllEntries = (moodId) => {
@@ -38,13 +34,16 @@ export const EntryList = ({ moods, entries, onEditButtonClick, onDeleteButtonCli
         }}>All</a>
         {
           moods.map(mood => {
-            return <a onClick={() => filterAllEntries(mood.id)} className={moodSelected === mood.id ? "is-active" : ""}>{mood.label}</a>
+            return <a
+              onClick={() => filterAllEntries(mood.id)}
+              className={moodSelected === mood.id ? "is-active" : ""}
+            >{mood.label}</a>
           })
         }
       </p>
-      <div class="panel-block">
-        <p class="control has-icons-left">
-          <input class="input is-primary" type="text" placeholder="Search" onKeyUp={
+      <div className="panel-block">
+        <p className="control has-icons-left">
+          <input className="input is-primary" type="text" placeholder="Search" onKeyUp={
             (event) => {
               const searchTerm = event.target.value
               setTerm(searchTerm)
