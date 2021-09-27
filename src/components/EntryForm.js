@@ -1,24 +1,16 @@
-import React, { useContext, useState, useEffect } from "react"
-import { EntryContext } from "./EntryProvider"
-import { MoodContext } from "./mood/MoodProvider"
+import React, { useState, useEffect } from "react"
 
-
-export const EntryForm = (props) => {
-    const { addEntry, updateEntry, entry, setEntry } = useContext(EntryContext)
-    const { moods, getMoods } = useContext(MoodContext)
-
-    const [editMode, editModeChanged] = useState(false)
+export const EntryForm = ({ entry, moods, onFormSubmit }) => {
+    const [editMode, setEditMode] = useState(false)
+    const [updatedEntry, setUpdatedEntry] = useState(entry)
 
     useEffect(() => {
-        getMoods()
-    }, [])
-
-    useEffect(() => {
+        setUpdatedEntry(entry)
         if ('id' in entry) {
-            editModeChanged(true)
+            setEditMode(true)
         }
         else {
-            editModeChanged(false)
+            setEditMode(false)
         }
     }, [entry])
 
@@ -27,84 +19,82 @@ export const EntryForm = (props) => {
             When changing a state object or array, always create a new one
             and change state instead of modifying current one
         */
-        const newEntry = Object.assign({}, entry)
+        const newEntry = Object.assign({}, updatedEntry)
         newEntry[event.target.name] = event.target.value
-        setEntry(newEntry)
+        setUpdatedEntry(newEntry)
     }
 
 
 
     const constructNewEntry = () => {
-
-        if (editMode) {
-            updateEntry({
-                id: entry.id,
-                concept: entry.concept,
-                entry: entry.entry,
-                date: entry.date,
-                moodId: parseInt(entry.moodId)
-            })
-        } else {
-            addEntry({
-                concept: entry.concept,
-                entry: entry.entry,
-                date: Date.now(),
-                moodId: parseInt(entry.moodId)
-            })
+        const copyEntry = { ...updatedEntry }
+        copyEntry.moodId = parseInt(copyEntry.moodId)
+        if (!copyEntry.date) {
+            copyEntry.date = Date(Date.now()).toLocaleString('en-us').split('GMT')[0]
         }
-        setEntry({ concept: "", entry: "", moodId: 0 })
+        onFormSubmit(copyEntry)
     }
 
     return (
-        <form className="EntryForm">
-            <h2 className="EntryForm__title">{editMode ? "Update Entry" : "Create Entry"}</h2>
-            <fieldset>
-                <div className="form-group">
-                    <label htmlFor="concept">Concept: </label>
-                    <input type="text" name="concept" required autoFocus className="form-control"
-                        proptype="varchar"
-                        placeholder="Concept"
-                        value={entry.concept}
-                        onChange={handleControlledInputChange}
-                    />
-                </div>
-            </fieldset>
-            <fieldset>
-                <div className="form-group">
-                    <label htmlFor="entry">Entry: </label>
-                    <input type="text" name="entry" required className="form-control"
-                        proptype="varchar"
-                        placeholder="Entry"
-                        value={entry.entry}
-                        onChange={handleControlledInputChange}
-                    />
-                </div>
-            </fieldset>
-            <fieldset>
-                <div className="form-group">
-                    <label htmlFor="moodId">Mood: </label>
-                    <select name="moodId" className="form-control"
-                        proptype="int"
-                        value={entry.moodId}
-                        onChange={handleControlledInputChange}>
+        <article className="panel is-info">
+            <h2 className="panel-heading">{editMode ? "Update Entry" : "Create Entry"}</h2>
+            <div className="panel-block">
+                <form style={{ width: "100%" }}>
+                    <div className="field">
+                        <label htmlFor="concept" className="label">Concept: </label>
+                        <div className="control">
+                            <input type="text" name="concept" required autoFocus className="input"
+                                proptype="varchar"
+                                placeholder="Concept"
+                                value={updatedEntry.concept}
+                                onChange={handleControlledInputChange}
+                            />
+                        </div>
+                    </div>
+                    <div className="field">
+                        <label htmlFor="entry" className="label">Entry: </label>
+                        <div className="control">
+                            <textarea
+                                class="textarea"
+                                name="entry"
+                                value={updatedEntry.entry}
+                                onChange={handleControlledInputChange}
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <label htmlFor="moodId" className="label">Mood: </label>
+                        <div className="control">
+                            <div className="select">
+                                <select name="moodId"
+                                    proptype="int"
+                                    value={updatedEntry.moodId}
+                                    onChange={handleControlledInputChange}>
 
-                        <option value="0">Select a mood</option>
-                        {moods.map(m => (
-                            <option key={m.id} value={m.id}>
-                                {m.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </fieldset>
-            <button type="submit"
-                onClick={evt => {
-                    evt.preventDefault()
-                    constructNewEntry()
-                }}
-                className="btn btn-primary">
-                {editMode ? "Update" : "Save"}
-            </button>
-        </form>
+                                    <option value="0">Select a mood</option>
+                                    {moods.map(m => (
+                                        <option key={m.id} value={m.id}>
+                                            {m.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="field">
+                        <div className="control">
+                            <button type="submit"
+                                onClick={evt => {
+                                    evt.preventDefault()
+                                    constructNewEntry()
+                                }}
+                                className="button is-link">
+                                {editMode ? "Update" : "Save"}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </article>
     )
 }
