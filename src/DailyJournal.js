@@ -7,7 +7,11 @@ import { getMoods } from "./components/mood/MoodManager";
 export const DailyJournal = () => {
   const [entries, setEntries] = useState([])
   const [moods, setMoods] = useState([])
-  const [entry, setEntry] = useState({})
+  const [entry, setEntry] = useState({
+    concept: '',
+    entry: '',
+    moodId: 0
+  })
 
   useEffect(() => {
     getAllEntries()
@@ -19,7 +23,7 @@ export const DailyJournal = () => {
   }
 
   const onEditButtonClick = (entryId) => {
-    getEntryById(entryId).then(entryData => setEntry(entryData)).then(() => console.log(entry))
+    getEntryById(entryId).then(entryData => setEntry(entryData))
   }
 
   const onDeleteButtonClick = (entryId) => {
@@ -28,7 +32,6 @@ export const DailyJournal = () => {
   }
 
   const onFormSubmit = (entryData) => {
-    console.log("submit", entryData)
     if (entryData.id) {
       updateEntry(entryData).then(getAllEntries)
     } else {

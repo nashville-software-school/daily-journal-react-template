@@ -28,17 +28,18 @@ export const EntryList = ({ moods, entries, onEditButtonClick, onDeleteButtonCli
     <article className="panel is-primary">
       <h1 className="panel-heading">Entries</h1>
       <p className="panel-tabs">
-        <a className={moodSelected === "" ? "is-active" : ""} onClick={() => {
+      {/* eslint-disable-next-line */}
+        <a href="#" className={moodSelected === "" ? "is-active" : ""} onClick={() => {
           setEntries(entries)
           setMoodSelected("")
         }}>All</a>
         {
-          moods.map(mood => {
-            return <a
+          // eslint-disable-next-line
+          moods.map(mood => (<a key={mood.id}
               onClick={() => filterAllEntries(mood.id)}
               className={moodSelected === mood.id ? "is-active" : ""}
             >{mood.label}</a>
-          })
+          ))
         }
       </p>
       <div className="panel-block">
@@ -52,16 +53,9 @@ export const EntryList = ({ moods, entries, onEditButtonClick, onDeleteButtonCli
         </p>
       </div>
 
-
-
-      {/*
-            Pseudo Code
-            .filter(happyEntries => happyEntries.mood.label === "Happy")
-        */}
       {filteredEntries.map(entry => {
-        return <div className="panel-block">
+        return <div className="panel-block" key={entry.id}>
           <Entry
-            key={entry.id}
             entry={entry}
             mood={moods.find(m => m.id === entry.moodId)}
             onEditButtonClick={onEditButtonClick}

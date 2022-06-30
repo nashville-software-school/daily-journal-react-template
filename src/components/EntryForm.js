@@ -19,7 +19,7 @@ export const EntryForm = ({ entry, moods, onFormSubmit }) => {
             When changing a state object or array, always create a new one
             and change state instead of modifying current one
         */
-        const newEntry = Object.assign({}, updatedEntry)
+        const newEntry ={...updatedEntry}
         newEntry[event.target.name] = event.target.value
         setUpdatedEntry(newEntry)
     }
@@ -55,7 +55,7 @@ export const EntryForm = ({ entry, moods, onFormSubmit }) => {
                         <label htmlFor="entry" className="label">Entry: </label>
                         <div className="control">
                             <textarea
-                                class="textarea"
+                                className="textarea"
                                 name="entry"
                                 value={updatedEntry.entry}
                                 onChange={handleControlledInputChange}
@@ -70,13 +70,12 @@ export const EntryForm = ({ entry, moods, onFormSubmit }) => {
                                     proptype="int"
                                     value={updatedEntry.moodId}
                                     onChange={handleControlledInputChange}>
-
-                                    <option value="0">Select a mood</option>
-                                    {moods.map(m => (
-                                        <option key={m.id} value={m.id}>
-                                            {m.label}
-                                        </option>
-                                    ))}
+                                        <option value="0">Select a mood</option>
+                                        {moods.map(m => (
+                                            <option key={m.id} value={m.id}>
+                                                {m.label}
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
                         </div>
